@@ -60,6 +60,11 @@ export class ArtistService {
 
     this.db.artists.splice(entityIndex, 1);
 
+    const artistTracks = this.db.tracks.filter(
+      (track) => track.artistId === entity.id,
+    );
+    artistTracks.forEach((track) => (track.artistId = null));
+
     const artistAlbums = this.db.albums.filter(
       (album) => album.artistId === entity.id,
     );
