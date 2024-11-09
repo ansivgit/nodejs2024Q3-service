@@ -9,6 +9,7 @@ import { testData } from './testData';
 export class DataBase {
   public albums: Album[] = [testData.album];
   public artists: Artist[] = [testData.artist];
+  public favs: Record<string, string[]> = testData.favs;
   public tracks: Track[] = [testData.track];
   public users: User[] = [testData.user];
 }

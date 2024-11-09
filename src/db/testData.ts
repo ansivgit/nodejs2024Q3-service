@@ -19,8 +19,8 @@ export const testData = {
     artistId: 'e150017f-5164-4c97-a88d-a823787f67d2',
   },
   track: {
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    name: 'The Show Must Go On',
+    id: 'c657dccb-220b-48a6-9bc9-470396461bd9',
+    name: 'Best track',
     artistId: 'e150017f-5164-4c97-a88d-a823787f67d2',
     albumId: 'b45b710b-1feb-472c-bab5-d335df887cad',
     duration: 262,
@@ -28,6 +28,6 @@ export const testData = {
   favs: {
     artists: ['e150017f-5164-4c97-a88d-a823787f67d2'],
     albums: ['b45b710b-1feb-472c-bab5-d335df887cad'],
-    tracks: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
+    tracks: ['c657dccb-220b-48a6-9bc9-470396461bd9'],
   },
 };
