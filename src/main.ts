@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 import 'dotenv/config';
 
@@ -12,6 +13,7 @@ async function bootstrap() {
 
   const swaggerDoc = await getSwaggerDoc();
   SwaggerModule.setup('doc', app, swaggerDoc);
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(PORT);
   console.log(`Application is running on: ${await app.getUrl()}`);
