@@ -4,10 +4,14 @@ import { DataBase } from 'src/db/db';
 import { Track } from './entities/track.entity';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { FavsService } from 'src/favs/favs.service';
 
 @Injectable()
 export class TrackService {
-  constructor(private readonly db: DataBase) {}
+  constructor(
+    private readonly db: DataBase,
+    private readonly favsService: FavsService,
+  ) {}
 
   create(createTrackDto: CreateTrackDto): Track {
     const entity = new Track({ id: v4(), ...createTrackDto });
@@ -62,6 +66,8 @@ export class TrackService {
     );
 
     this.db.tracks.splice(entityIndex, 1);
+
+    this.favsService.removeTrack(id);
 
     console.log(`This action removes a #${id} track`);
   }

@@ -2,110 +2,85 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 
 import { DataBase } from 'src/db/db';
 import { Album } from 'src/album/entities/album.entity';
-import { AlbumService } from 'src/album/album.service';
 import { Artist } from 'src/artist/entities/artist.entity';
-import { ArtistService } from 'src/artist/artist.service';
 import { Track } from 'src/track/entities/track.entity';
-import { TrackService } from 'src/track/track.service';
 
 import { Favs } from './entities/favs.entity';
 
 @Injectable()
 export class FavsService {
-  constructor(
-    private readonly db: DataBase,
-    private readonly albumService: AlbumService,
-    private readonly artistService: ArtistService,
-    private readonly trackService: TrackService,
-  ) {}
+    constructor(private readonly db: DataBase) {}
 
-  findAll(): Favs {
-    const albums: Album[] = this.db.favs.albums.map((albumId) =>
-      this.albumService.findOne(albumId),
-    );
+    findAll(): Favs {
+      const albums: Album[] = this.db.favs.albums;
+      const artists: Artist[] = this.db.favs.artists;
+      const tracks: Track[] = this.db.favs.tracks;
 
-    const artists: Artist[] = this.db.favs.artists.map((artistId) =>
-      this.artistService.findOne(artistId),
-    );
+      const res: Favs = { artists, albums, tracks };
 
-    const tracks: Track[] = this.db.favs.tracks.map((trackId) =>
-      this.trackService.findOne(trackId),
-    );
-
-    const res: Favs = {
-      artists: artists,
-      albums: albums,
-      tracks: tracks,
-    };
-    return res;
-  }
-
-  createAlbum(id: string): Album {
-    const album: Album | undefined = this.db.albums.find(
-      (entity) => entity.id === id,
-    );
-
-    if (!album) {
-      throw new UnprocessableEntityException("Item doesn't exist");
+      return res;
     }
 
-    this.db.favs.albums.push(album.id);
-    return album;
-  }
+    createAlbum(id: string): Album {
+      const album: Album | undefined = this.db.albums.find(
+        (entity) => entity.id === id,
+      );
 
-  removeAlbum(id: string): void {
-    const entity = this.albumService.findOne(id);
+      if (!album) {
+        throw new UnprocessableEntityException("Item doesn't exist");
+      }
 
-    const entityIndex = this.db.favs.albums.findIndex(
-      (itemId) => itemId === entity.id,
-    );
-
-    this.db.favs.albums.splice(entityIndex, 1);
-  }
-
-  createArtist(id: string): Artist {
-    const artist: Artist | undefined = this.db.artists.find(
-      (entity) => entity.id === id,
-    );
-
-    if (!artist) {
-      throw new UnprocessableEntityException("Item doesn't exist");
+      this.db.favs.albums.push(album);
+      return album;
     }
 
-    this.db.favs.artists.push(artist.id);
-    return artist;
-  }
+    removeAlbum(id: string): void {
+      const entityIndex = this.db.favs.albums.findIndex(
+        (item) => item.id === id,
+      );
 
-  removeArtist(id: string): void {
-    const entity = this.artistService.findOne(id);
-
-    const entityIndex = this.db.favs.artists.findIndex(
-      (itemId) => itemId === entity.id,
-    );
-
-    this.db.favs.artists.splice(entityIndex, 1);
-  }
-
-  createTrack(id: string): Track {
-    const track: Track | undefined = this.db.tracks.find(
-      (entity) => entity.id === id,
-    );
-
-    if (!track) {
-      throw new UnprocessableEntityException("Item doesn't exist");
+      this.db.favs.albums.splice(entityIndex, 1);
     }
 
-    this.db.favs.tracks.push(track.id);
-    return track;
-  }
+    createArtist(id: string): Artist {
+      const artist: Artist | undefined = this.db.artists.find(
+        (entity) => entity.id === id,
+      );
 
-  removeTrack(id: string): void {
-    const entity = this.trackService.findOne(id);
+      if (!artist) {
+        throw new UnprocessableEntityException("Artist doesn't exist");
+      }
 
-    const entityIndex = this.db.favs.tracks.findIndex(
-      (itemId) => itemId === entity.id,
-    );
+      this.db.favs.artists.push(artist);
+      return artist;
+    }
 
-    this.db.favs.tracks.splice(entityIndex, 1);
-  }
+    removeArtist(id: string): void {
+      const entityIndex = this.db.favs.artists.findIndex(
+        (item) => item.id === id,
+      );
+
+      this.db.favs.artists.splice(entityIndex, 1);
+    }
+
+    createTrack(id: string): Track {
+      const track: Track | undefined = this.db.tracks.find(
+        (entity) => entity.id === id,
+      );
+
+      if (!track) {
+        throw new UnprocessableEntityException("Item doesn't exist");
+      }
+
+      this.db.favs.tracks.push(track);
+      return track;
+    }
+
+    removeTrack(id: string): void {
+      const entityIndex = this.db.favs.tracks.findIndex(
+        (item) => item.id === id,
+      );
+
+      this.db.favs.tracks.splice(entityIndex, 1);
+    }
 }

@@ -48,7 +48,7 @@ export class FavsController {
   }
 
   @Post('track/:id')
-  @HttpCode(200)
+  @HttpCode(201)
   createTrack(@Param('id', ParseUUIDPipe) id: string): Track {
     return this.favsService.createTrack(id);
   }

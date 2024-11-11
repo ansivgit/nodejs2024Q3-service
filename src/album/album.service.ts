@@ -4,10 +4,14 @@ import { DataBase } from 'src/db/db';
 import { Album } from './entities/album.entity';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { FavsService } from 'src/favs/favs.service';
 
 @Injectable()
 export class AlbumService {
-  constructor(private readonly db: DataBase) {}
+  constructor(
+    private readonly db: DataBase,
+    private readonly favsService: FavsService,
+  ) {}
 
   create(createAlbumDto: CreateAlbumDto): Album {
     const entity = new Album({ id: v4(), ...createAlbumDto });
@@ -62,6 +66,8 @@ export class AlbumService {
       (track) => track.albumId === entity.id,
     );
     albumTracks.forEach((track) => (track.albumId = null));
+
+    this.favsService.removeAlbum(id);
 
     console.log(`This action removes a #${id} album`);
   }

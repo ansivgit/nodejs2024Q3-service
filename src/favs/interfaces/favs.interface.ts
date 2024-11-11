@@ -1,5 +1,9 @@
-export interface Favs extends Record<string, string[]> {
-  artists: string[]; // favorite artists ids
-  albums: string[];
-  tracks: string[];
+import { Album } from 'src/album/interfaces/album.interface';
+import { Artist } from 'src/artist/interfaces/artist.interface';
+import { Track } from 'src/track/interfaces/track.interface';
+
+export interface Favs {
+  artists: Artist[];
+  albums: Album[];
+  tracks: Track[];
 }
