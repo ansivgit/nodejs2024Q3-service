@@ -9,78 +9,74 @@ import { Favs } from './entities/favs.entity';
 
 @Injectable()
 export class FavsService {
-    constructor(private readonly db: DataBase) {}
+  constructor(private readonly db: DataBase) {}
 
-    findAll(): Favs {
-      const albums: Album[] = this.db.favs.albums;
-      const artists: Artist[] = this.db.favs.artists;
-      const tracks: Track[] = this.db.favs.tracks;
+  findAll(): Favs {
+    const albums: Album[] = this.db.favs.albums;
+    const artists: Artist[] = this.db.favs.artists;
+    const tracks: Track[] = this.db.favs.tracks;
 
-      const res: Favs = { artists, albums, tracks };
+    const res: Favs = { artists, albums, tracks };
 
-      return res;
+    return res;
+  }
+
+  createAlbum(id: string): Album {
+    const album: Album | undefined = this.db.albums.find(
+      (entity) => entity.id === id,
+    );
+
+    if (!album) {
+      throw new UnprocessableEntityException("Item doesn't exist");
     }
 
-    createAlbum(id: string): Album {
-      const album: Album | undefined = this.db.albums.find(
-        (entity) => entity.id === id,
-      );
+    this.db.favs.albums.push(album);
+    return album;
+  }
 
-      if (!album) {
-        throw new UnprocessableEntityException("Item doesn't exist");
-      }
+  removeAlbum(id: string): void {
+    const entityIndex = this.db.favs.albums.findIndex((item) => item.id === id);
 
-      this.db.favs.albums.push(album);
-      return album;
+    this.db.favs.albums.splice(entityIndex, 1);
+  }
+
+  createArtist(id: string): Artist {
+    const artist: Artist | undefined = this.db.artists.find(
+      (entity) => entity.id === id,
+    );
+
+    if (!artist) {
+      throw new UnprocessableEntityException("Artist doesn't exist");
     }
 
-    removeAlbum(id: string): void {
-      const entityIndex = this.db.favs.albums.findIndex(
-        (item) => item.id === id,
-      );
+    this.db.favs.artists.push(artist);
+    return artist;
+  }
 
-      this.db.favs.albums.splice(entityIndex, 1);
+  removeArtist(id: string): void {
+    const entityIndex = this.db.favs.artists.findIndex(
+      (item) => item.id === id,
+    );
+
+    this.db.favs.artists.splice(entityIndex, 1);
+  }
+
+  createTrack(id: string): Track {
+    const track: Track | undefined = this.db.tracks.find(
+      (entity) => entity.id === id,
+    );
+
+    if (!track) {
+      throw new UnprocessableEntityException("Item doesn't exist");
     }
 
-    createArtist(id: string): Artist {
-      const artist: Artist | undefined = this.db.artists.find(
-        (entity) => entity.id === id,
-      );
+    this.db.favs.tracks.push(track);
+    return track;
+  }
 
-      if (!artist) {
-        throw new UnprocessableEntityException("Artist doesn't exist");
-      }
+  removeTrack(id: string): void {
+    const entityIndex = this.db.favs.tracks.findIndex((item) => item.id === id);
 
-      this.db.favs.artists.push(artist);
-      return artist;
-    }
-
-    removeArtist(id: string): void {
-      const entityIndex = this.db.favs.artists.findIndex(
-        (item) => item.id === id,
-      );
-
-      this.db.favs.artists.splice(entityIndex, 1);
-    }
-
-    createTrack(id: string): Track {
-      const track: Track | undefined = this.db.tracks.find(
-        (entity) => entity.id === id,
-      );
-
-      if (!track) {
-        throw new UnprocessableEntityException("Item doesn't exist");
-      }
-
-      this.db.favs.tracks.push(track);
-      return track;
-    }
-
-    removeTrack(id: string): void {
-      const entityIndex = this.db.favs.tracks.findIndex(
-        (item) => item.id === id,
-      );
-
-      this.db.favs.tracks.splice(entityIndex, 1);
-    }
+    this.db.favs.tracks.splice(entityIndex, 1);
+  }
 }

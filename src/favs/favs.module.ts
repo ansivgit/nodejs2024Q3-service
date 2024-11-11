@@ -9,5 +9,4 @@ import { FavsService } from './favs.service';
   providers: [FavsService],
   exports: [FavsService],
 })
-
 export class FavsModule {}
